@@ -10,7 +10,7 @@ export interface IProperty {
 }
 
 export interface IPropertyWithId {
-  _id: Types.ObjectId;
+  id: Types.ObjectId;
   address_line1: string;
   address_line2?: string;
   city: string;

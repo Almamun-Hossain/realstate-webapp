@@ -54,7 +54,7 @@ const deleteProperty = handleAsyncError(async (req: Request, res: Response, next
 
   let property = await propertyServices.deletePropertyById(req.params.propertyId);
 
-  return res.send(property).status(httpStatus.ACCEPTED);
+  return res.json({ success: true, message: "Deleted successfully" }).status(httpStatus.NO_CONTENT);
 });
 
 export { createProperty, getProperty, readProperty, updateProperty, deleteProperty };

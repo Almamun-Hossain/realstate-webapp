@@ -6,7 +6,7 @@ import {
   readProperty,
   updateProperty
 } from "../controllers/property.controller";
-import validateRequest from "../middleware/validateRequest";
+import validateRequest from "../middleware/validateRequest.middleware";
 import {
   createPropertyValidator,
   deletePropertyValidator,
