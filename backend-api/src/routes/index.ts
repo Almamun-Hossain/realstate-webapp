@@ -1,9 +1,10 @@
-import express from "express";
+import express, { Router } from "express";
 import { Request, Response, NextFunction } from "express";
 import propertyRoutes from "./property.routes";
 import userRoutes from "./user.routes";
 import authRoutes from "./auth.routes";
-let router = express.Router();
+import propertyTypes from "./property_types.routes";
+let router: Router = express.Router();
 
 router.get("/health", (req: Request, res: Response, next: NextFunction) => {
   console.log("health route");
@@ -14,5 +15,6 @@ router.get("/health", (req: Request, res: Response, next: NextFunction) => {
 router.use(userRoutes);
 router.use(authRoutes);
 router.use(propertyRoutes);
+router.use(propertyTypes);
 
 export default router;
