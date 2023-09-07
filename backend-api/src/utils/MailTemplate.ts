@@ -12,7 +12,7 @@ export function renderResetPasswordTemplate(name: string, resetPasswordUrl: stri
           <p>Hi {{name}},</p>
           <p>You requested to reset your password. To do this, please click on the following link:</p>
           <a href="{{reset_password_url}}" class="btn btn-primary">Reset Password</a>
-          <p>This link will expire in 24 hours.</p>
+          <p>This link will expire in 15 minutes.</p>
           <p>If you did not request to reset your password, please ignore this email.</p>
         </div>
       </body>

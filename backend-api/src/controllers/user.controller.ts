@@ -3,6 +3,7 @@ import handleAsyncError from "../ErrorHandler/handleAsyncError";
 import httpStatus from "http-status";
 import UserModel from "../models/user.model";
 import { userServices } from "../services";
+import { RequestWithUser } from "../interface/RequestWithUser.interface";
 
 export const getUsers = handleAsyncError(async (req: Request, res: Response) => {
   let users = await userServices.getUsers();
@@ -23,6 +24,7 @@ export const getUserById = handleAsyncError(async (req: Request, res: Response) 
   return res.json(user).status(httpStatus.OK);
 });
 export const deleteUser = handleAsyncError(async (req: Request, res: Response) => {
+  console.log((req as RequestWithUser).user);
   let user = await userServices.deleteUserById(req.params.userId);
   return res.json(user).status(httpStatus.OK);
 });

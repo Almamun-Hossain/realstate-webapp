@@ -6,16 +6,25 @@ import jwt from "jsonwebtoken";
 import variables from "../config/variables";
 import { userServices } from "../services";
 import { JwtTokenPayload } from "../interface/jwt.interface";
-import { IUserWithID } from "../interface/user.interface";
+import { RequestWithUser } from "../interface/RequestWithUser.interface";
 
-export const isAuthenticated = handleAsyncError(async (req: Request<IUserWithID>, res: Response, next: NextFunction) => {
+export const isAuthenticated = handleAsyncError(async (req: Request, res: Response, next: NextFunction) => {
   let { token } = req.cookies;
 
-  if (!token) throw new CustomError("JWT token not found", httpStatus.NOT_FOUND);
+  if (!token) throw new CustomError("Please login to access the page", httpStatus.NOT_FOUND);
 
   let decode = (await jwt.verify(token, variables.jwt.secret)) as JwtTokenPayload;
   let user = await userServices.getUserById(decode.id);
   if (!user) throw new CustomError("Token malfunctioned", httpStatus.UNAUTHORIZED);
-//   req.user = user;
+
+  (req as RequestWithUser).user = user;
+  next();
+});
+
+export const isAdmin = handleAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+  let user = (req as RequestWithUser).user;
+  if (!user) throw new CustomError("You are not authorizes", httpStatus.UNAUTHORIZED);
+
+  if (!user.isAdmin) throw new CustomError("Only admin can access this page", httpStatus.UNAUTHORIZED);
   next();
 });

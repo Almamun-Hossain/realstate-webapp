@@ -28,12 +28,12 @@ class SendEmail {
     }
   }
 
-  async sendResetPasswordEmail(email: string, token: string): Promise<void> {
-    let url = `http://localhost:3000/reset-password/${token}`;
-    let renderHtml = renderResetPasswordTemplate(email, url);
+  async sendResetPasswordEmail(email: string, name: string, token: string): Promise<void> {
+    let url = `http://localhost:4000/api/v1/reset-password/${token}`;
+    let renderHtml = renderResetPasswordTemplate(name, url);
     let options = {
       to: email,
-      subject: `Reset password request for ${email}`,
+      subject: `Reset password request`,
       html: renderHtml
     } satisfies SendMailOptions;
     await this.send(options);

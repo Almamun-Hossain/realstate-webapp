@@ -13,15 +13,16 @@ import {
   getPropertyValidator,
   updatePropertyValidator
 } from "../validators/property.validator";
+import { isAuthenticated } from "../middleware/auth.middleware";
 
 let router = express.Router();
 
-router.route("/property").get(getProperty).post(validateRequest(createPropertyValidator), createProperty);
+router.route("/property").get(getProperty).post(isAuthenticated, validateRequest(createPropertyValidator), createProperty);
 
 router
   .route("/property/:propertyId")
   .get(validateRequest(getPropertyValidator), readProperty)
-  .put(validateRequest(updatePropertyValidator), updateProperty)
-  .delete(validateRequest(deletePropertyValidator), deleteProperty);
+  .put(isAuthenticated, validateRequest(updatePropertyValidator), updateProperty)
+  .delete(isAuthenticated, validateRequest(deletePropertyValidator), deleteProperty);
 
 export default router;

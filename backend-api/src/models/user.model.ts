@@ -58,8 +58,7 @@ const UserSchema = new Schema<IUser>(
     },
     isEmailVerified: {
       type: Boolean,
-      default: false,
-      private: true
+      default: false
     },
     resetPasswordToken: { type: String, default: null, private: true },
     resetPasswordExpire: { type: Date, default: null, private: true }

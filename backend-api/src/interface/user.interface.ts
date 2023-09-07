@@ -7,11 +7,11 @@ export interface IUser extends Document {
   password: string;
   isAdmin: boolean;
   isEmailVerified: boolean;
-  resetPasswordToken: string;
-  resetPasswordExpire: Date;
+  resetPasswordToken: string | null;
+  resetPasswordExpire: Date | null;
   comparePassword(userPassword: string): boolean;
   getJwtToken(): string;
-  generatePasswordResetToken():string
+  generatePasswordResetToken(): string;
 }
 
 export interface IUserWithID {
