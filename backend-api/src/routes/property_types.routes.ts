@@ -11,6 +11,7 @@ import {
 const router: Router = express.Router();
 
 router.route("/property-types").get(getAllPropertyTypes).post(isAuthenticated, isAdmin, addNewPropertyTypes);
+
 router
   .route("/property-types/:propertyTypesId")
   .get(getPropertyTypesById)

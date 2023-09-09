@@ -7,6 +7,13 @@ export interface IProperty {
   country: string;
   price: number;
   thumbnail?: string;
+  property_types?: Types.ObjectId;
+  property_size: number;
+  block_size: number;
+  num_bedrooms: number;
+  num_bathrooms: number;
+  num_carspace: number;
+  description?: string;
 }
 
 export interface IPropertyWithId {

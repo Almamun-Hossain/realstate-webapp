@@ -12,7 +12,14 @@ let body = object({
     required_error: "Price is missing",
     invalid_type_error: "Price should be number"
   }),
-  thumbnail: string().optional().nullable()
+  thumbnail: string().optional().nullable(),
+  property_types: string(),
+  property_size: number(),
+  block_size: number(),
+  num_bedrooms: number(),
+  num_bathrooms: number(),
+  num_carspace: number(),
+  description: string().optional().nullable()
 });
 
 let params = object({

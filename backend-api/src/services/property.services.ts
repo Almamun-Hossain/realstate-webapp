@@ -8,7 +8,7 @@ const createProperty = async (data: IProperty) => {
 };
 
 const allProperty = async () => {
-  let properties = await PropertyModel.find({});
+  let properties = await PropertyModel.find({}).populate("property_types");
 
   return properties;
 };
@@ -16,7 +16,7 @@ const allProperty = async () => {
 const readPropertyById = async (id: string) => {
   let isValidId = Types.ObjectId.isValid(id);
   if (!isValidId) return { message: "Invalid Property Id" };
-  let property = await PropertyModel.findById(id);
+  let property = await PropertyModel.findById(id).populate("property_types");
   return property;
 };
 

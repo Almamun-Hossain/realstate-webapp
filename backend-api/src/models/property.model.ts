@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 import { IProperty } from "../interface/property.interface";
 import { toJSON } from "./plugin/toJSON.plugin";
 
@@ -33,6 +33,33 @@ const PropertySchema = new Schema<IProperty>(
       type: String,
       required: false,
       default: null
+    },
+    property_types: {
+      type: Types.ObjectId,
+      ref: "PropertyTypes"
+    },
+    property_size: {
+      type: Number,
+      required: true
+    },
+    block_size: {
+      type: Number,
+      required: true
+    },
+    num_bedrooms: {
+      type: Number,
+      required: true
+    },
+    num_bathrooms: {
+      type: Number,
+      required: true
+    },
+    num_carspace: {
+      type: Number,
+      required: true
+    },
+    description: {
+      type: String
     }
   },
   { timestamps: true }
