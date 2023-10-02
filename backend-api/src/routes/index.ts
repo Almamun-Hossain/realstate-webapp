@@ -6,6 +6,7 @@ import authRoutes from "./auth.routes";
 import propertyTypes from "./property_types.routes";
 import listingTypes from "./listing_types.routes";
 import featureRoutes from "./feature.routes";
+import propertyFeatureRoutes from "./property_feature.routes";
 let router: Router = express.Router();
 
 router.get("/health", (req: Request, res: Response, next: NextFunction) => {
@@ -20,4 +21,5 @@ router.use(propertyRoutes);
 router.use(propertyTypes);
 router.use(listingTypes);
 router.use(featureRoutes);
+router.use(propertyFeatureRoutes);
 export default router;
