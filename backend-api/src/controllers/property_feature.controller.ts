@@ -15,9 +15,14 @@ export const getPropertyFeartureById = async (req: Request, res: Response) => {
   let propertyFeature = await propertyFeatureSevices.getPropertyFeatureById(id);
   return res.json(propertyFeature).status(200);
 };
-export const updatePropertyFearturbyId = async (req: Request, res: Response) => {};
+export const updatePropertyFearturbyId = async (req: Request, res: Response) => {
+  let { id } = req.params;
+  let { featureIds } = req.body;
+  let update = await propertyFeatureSevices.updatePropertyFeature(id, featureIds);
+  return res.json(update).status(200);
+};
 export const deletePropertyFearturebyId = async (req: Request, res: Response) => {
   let { id } = req.params;
-  let propertyFeature = await propertyFeatureSevices.deletePropertyFeature(id);
+  let propertyFeature = await propertyFeatureSevices.deleteAllPropertyFeature(id);
   return res.json(propertyFeature).status(200);
 };

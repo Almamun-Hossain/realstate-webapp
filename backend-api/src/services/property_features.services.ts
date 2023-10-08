@@ -1,9 +1,9 @@
 import { PropertyFeatureDocument } from "../interface/property_features.interface";
 import PropertyFeatureModel from "../models/property_feature.model";
-import { Types } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 
 export const getAllPropertyFeature = async () => {
-  let allPropertyFeature = await PropertyFeatureModel.find({});
+  let allPropertyFeature = await PropertyFeatureModel.find({}).populate(["propertyId", "featureIds"]);
   return allPropertyFeature;
 };
 
@@ -13,13 +13,10 @@ async function createOrUpdatePropertyFeature(propertyId: string, featureIds: str
   let propertyFeature = await PropertyFeatureModel.findOne({ propertyId });
 
   if (propertyFeature) {
-    let stringIds: string[] = [];
-    propertyFeature.featureIds.map((item) => stringIds.push(item.toString()));
-    //get unique feature id
-    let uniqueFeature = Array.from(new Set([...stringIds, ...featureIds]));
+    //process and filter duplicate fearture id
+    let uniqueFeature = processUniqueFeatureId(propertyFeature.featureIds, featureIds);
 
-    //convert the unique feature string id to mongoose object id
-    propertyFeature.featureIds = uniqueFeature.map((item) => (typeof item === "string" ? new Types.ObjectId(item) : item));
+    propertyFeature.featureIds = uniqueFeature;
   } else {
     propertyFeature = new PropertyFeatureModel({
       propertyId,
@@ -41,24 +38,34 @@ async function getPropertyFeatureById(id: string): Promise<PropertyFeatureDocume
 }
 
 // Update a PropertyFeature by its ID
-async function updatePropertyFeature(
-  id: string,
-  propertyId: string,
-  featureIds: string[]
-): Promise<PropertyFeatureDocument | null> {
-  const updatedPropertyFeature = await PropertyFeatureModel.findByIdAndUpdate(
-    id,
-    { propertyId, featureIds },
+async function updatePropertyFeature(id: string, featureIds: string[]): Promise<PropertyFeatureDocument | null> {
+  const updatedPropertyFeature = await PropertyFeatureModel.findOneAndUpdate(
+    { $or: [{ _id: id }, { propertyId: id }] },
+    { featureIds },
     { new: true }
-  ).exec();
+  ).populate(["propertyId", "featureIds"]);
 
   return updatedPropertyFeature;
 }
 
 // Delete a PropertyFeature by its ID
-async function deletePropertyFeature(id: string): Promise<PropertyFeatureDocument | null> {
-  const deletedPropertyFeature = await PropertyFeatureModel.findByIdAndDelete(id);
+async function deleteAllPropertyFeature(id: string): Promise<PropertyFeatureDocument | null> {
+  const deletedPropertyFeature = await PropertyFeatureModel.findOneAndDelete({ $or: [{ _id: id }, { propertyId: id }] });
   return deletedPropertyFeature;
 }
 
-export { createOrUpdatePropertyFeature, getPropertyFeatureById, updatePropertyFeature, deletePropertyFeature };
+const processUniqueFeatureId = (objectFeatureIds: Types.ObjectId[], stringFeatureIds: string[]): Types.ObjectId[] => {
+  //initialize an empty string array
+  let objectToStringIds: string[] = [];
+  //convert object array to sring array
+  objectFeatureIds.map((item) => objectToStringIds.push(item.toString()));
+
+  //filter using string id's using sort method, and type is string
+  let uniqueFeature = Array.from(new Set([...objectToStringIds, ...stringFeatureIds]));
+  // now convert string unique feature id to mongoose object id
+  let updateUniqueFeature = uniqueFeature.map((item) => (typeof item === "string" ? new Types.ObjectId(item) : item));
+
+  return updateUniqueFeature;
+};
+
+export { createOrUpdatePropertyFeature, getPropertyFeatureById, updatePropertyFeature, deleteAllPropertyFeature };
